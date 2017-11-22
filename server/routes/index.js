@@ -10,31 +10,27 @@ const Restaurant = require('../../models').Restaurant
 var allAttractions = {};
 //subrouter middleware
 router.get('/', (req, res, next) => {
-    Promise.all[
-        // Hotels.findAll()
-        // .then((hotel) => {
-        //     allAttractions.hotel = hotel;
-        //     return allAttractions.hotel
-        // })
-        // .then((activity) => {
-        //     allAttractions.activity = activity;
-        //     return allAttractions.activity
-        // })
-        // .then((place) => {
-        //     allAttractions.place = place;
-        //     return allAttractions.place
-        // })
-        // .then((restaurant) => {
-        //     allAttractions.restaurant = restaurant;
-        //     return allAttractions.restaurant
-        // })
-        // .then(function() {
-        //     res.json(allAttractions);
-        // })
-        // .catch(next)
-
+    Promise.all([
         Hotel.findAll({
-         includeALL:true
-     })
-        ]
-})
+         include: [{
+             all: true
+        }]}),
+        Restaurant.findAll({
+            include: [{
+                all: true
+        }]}),
+        Activity.findAll({
+            include: [{
+                all: true
+        }]}),
+        Place.findAll({
+            include: [{
+                all: true
+        }]})]
+    )
+    .then((all) => {
+        res.json(all);
+    });
+});
+
+module.exports = router;

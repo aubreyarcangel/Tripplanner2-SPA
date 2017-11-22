@@ -7,25 +7,30 @@ const db = require('../models').db
 var app = express();
 const routes = require('./routes')
 // server/routes/index.js
-
+console.log('is this running?')
 // logging and body-parsing
-app.use(morgan);
+
+// app.use(morgan);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
 // static file-serving middleware
 app.use(express.static(path.join(__dirname, "..", "public")));
-
+// app.use('/', (req, res, next) => {
+//   console.log('something');
+// })
+app.use('/api', routes);
 // failure to catch req above means 404, forward to error handler
-app.use(function(req, res, next) {
+app.use('/', function(req, res, next) {
+  console.log('console log middleware')
   var err = new Error("Not Found");
   err.status = 404;
   next(err);
 });
 
 // handle any errors
-app.use(function(err, req, res, next) {
+app.use('/', function(err, req, res, next) {
   console.error(err, err.stack);
   res.status(err.status || 500);
   res.send("Something went wrong: " + err.message);
@@ -46,7 +51,6 @@ app.listen(port, function() {
 });
 
 
-app.use('/api',routes);
 
 // app.listen(3000,()=>console.log('Server is listening on 3000'));
 
